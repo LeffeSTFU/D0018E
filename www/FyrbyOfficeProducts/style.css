@@ -78,3 +78,26 @@ h1 {
 table, th, td {
   border: 1px solid black;
 }
+
+/*Below is css code for the product cards*/
+
+.Products-body{
+  margin: 20px;
+}
+
+.Product-cards{
+  float: left;
+  margin: 20px;
+  background: #dfdfdf;
+  border-radius: 10px;
+  width: 200px;
+}
+
+.card-body{
+  text-align: center;
+}
+
+img{
+  max-width: auto;
+  max-height: 150px;
+}

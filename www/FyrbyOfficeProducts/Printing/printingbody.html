@@ -15,12 +15,34 @@ $sql = "SELECT * FROM `Products` WHERE productCategory=\"Printing Supplies\";";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-  echo "<table><tr><th>ID</th><th>Name</th><th>Stock</th><th>Price</th></tr>";
-  // output data of each row
-  while($row = $result->fetch_assoc()) {
-    echo "<tr><td>" . $row["productID"]. "</td><td>" . $row["productName"]. "</td><td>" . $row["productStock"]. "</td><td>" .$row["productPrice"]. "</td></tr>";
-  }
-  echo "</table>";
+  ?>
+  <div class="Products-body">
+  <?php
+    while($row = $result->fetch_assoc())
+      {
+  ?>
+  <div class="Product-cards">
+      <div class="card">
+          <div class="card-body">
+              <h5 class="card-title">
+                  <?php echo $row['productName']; ?>
+              </h5>
+              <img src="<?php echo $row['imageFile']; ?>" alt="<?php echo $row['imageFile']; ?>" />
+              <h6 class="card-stock">
+                Stock: <?php echo $row['productStock']; ?>
+              </h6>
+              <p class="price">
+                Price: <?php echo $row["productPrice"]; ?>
+              </p>
+              <button id="Add_to_cart">Add to cart</button>
+          </div>
+      </div><br>
+  </div>
+  <?php
+    }
+  ?>
+</div>
+<?php
 } else {
   echo "0 results";
 }
