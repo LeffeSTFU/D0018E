@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "Fyrby23";
@@ -11,36 +12,38 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM `ShoppingCart` WHERE customerID=$_SESSION["user_id"]; // ojojojojojoj Här ska vi stoppa in samma customer som är "inloggad"
+$usr_id = $_SESSION["user_id"];
+$sql = "SELECT Products.*, ShoppingCart.amount FROM Products INNER JOIN ShoppingCart ON Products.productID = ShoppingCart.productID AND ShoppingCart.customerID = '$usr_id';";
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
   ?>
   <div class="Products-body">
-    <?php
-      while($row = $result->fetch_assoc())
-        {
-    ?>
-    <div class="Product-cards">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <?php echo $row['productName']; ?>
-                </h5>
-                <img src="<?php echo $row['imageFile']; ?>" alt="<?php echo $row['imageFile']; ?>" />
-                <h6 class="card-stock">
-                  Quantity: <?php echo $row['productCartQuantity']; ?>
-                </h6>
-                <p class="price">
-                  Price: <?php echo $row["productPrice"]; ?>
-                </p>
-            </div>
-        </div><br>
-    </div>
-    <?php
-      }
-    ?>
+  <?php
+    while($row = $result->fetch_assoc())
+      {
+  ?>
+  <div class="Product-cards">
+      <div class="card">
+          <div class="card-body">
+              <h5 class="card-title">
+                  <?php echo $row['productName']; ?>
+              </h5>
+              <img src="<?php echo $row['imageFile']; ?>" alt="<?php echo $row['imageFile']; ?>" />
+              <h6 class="card-stock">
+                Amount: <?php echo $row["amount"]; ?>
+              </h6>
+              <p class="price">
+                Price: <?php echo $row["productPrice"]; ?>
+              </p>
+          </div>
+      </div><br>
   </div>
+  <?php
+    }
+  ?>
+</div>
 
 <?php
 } else {

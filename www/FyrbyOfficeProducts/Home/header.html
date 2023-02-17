@@ -1,6 +1,5 @@
 <?php
 session_start();
-// if ($_SESSION['user_type'] != 'admin' || 'user'){$_SESSION['user_type'] = 'guest'}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,12 +20,13 @@ session_start();
 				<a href="printing.php">Printing Supplies</a>
 				<a href="signuppage.php">Sign Up</a>
 				<a href="loginpage.php">Log In</a>
+				<a href="logoutpage.php">Log Out</a>
 				<a href="shoppingcart.php">Shoppingcart</a>
 				<div class="search-container">
-				  <form action="/search/action_search.php" method="post">
-					<input type="text" placeholder="Search.." name="search">
-					<button type="submit"><i class="fa fa-search"></i></button>
-				  </form>
+					<form method="post" action="action_search.php">
+						<input type="text" placeholder="Search.." name="search">
+						<button type="submit"><i class="fa fa-search"></i></button>
+					</form>
 				</div>
 			  </div>
 		</header>

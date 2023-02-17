@@ -23,7 +23,7 @@ if ($rs->num_rows > 0) {
 		$_SESSION["user_name"] = $row["customerUsername"];
 		$_SESSION["user_type"] = $row['accountType'];
 		$_SESSION["user_id"] = $row['customerID'];
-		header('location:index.php');
+		header('location:adminhome.php');
 
 	}elseif($row['accountType'] == 'user'){
 
@@ -36,7 +36,7 @@ if ($rs->num_rows > 0) {
 	
 }
 else{
-	$error[] = 'incorrect email or password!';
+	echo ('incorrect email or password!');
  }
 
 $conn->close();

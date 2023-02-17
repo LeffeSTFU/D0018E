@@ -22,7 +22,7 @@ h1 {
   display: block;
   color: black;
   text-align: center;
-  padding: 14px 16px;
+  padding: 14px 20px;
   text-decoration: none;
   font-size: 17px;
 }
@@ -86,11 +86,13 @@ table, th, td {
 }
 
 .Product-cards{
-  float: left;
+  float:left;
   margin: 20px;
   background: #dfdfdf;
   border-radius: 10px;
   width: 200px;
+  border-color: #808080;
+  border-style: solid;
 }
 
 .card-body{
@@ -100,4 +102,14 @@ table, th, td {
 img{
   max-width: auto;
   max-height: 150px;
+}
+
+/*Footer stuff below*/
+
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
 }

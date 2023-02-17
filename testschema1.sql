@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost:3306
--- Tid vid skapande: 10 feb 2023 kl 15:15
+-- Tid vid skapande: 17 feb 2023 kl 14:53
 -- Serverversion: 8.0.32-0ubuntu0.22.04.2
 -- PHP-version: 8.1.2-1ubuntu2.10
 
@@ -92,13 +92,13 @@ CREATE TABLE `Products` (
 --
 
 INSERT INTO `Products` (`productID`, `productName`, `productCategory`, `productStock`, `productPrice`, `imageFile`) VALUES
-(1, 'Pencil', 'Desk Supplies', 500, 5, NULL),
-(2, 'Eraser', 'Desk Supplies', 100, 5, NULL),
+(1, 'Pencil', 'Desk Supplies', 500, 5, '/image/pencil.jpg'),
+(2, 'Eraser', 'Desk Supplies', 100, 5, '/image/eraser.png'),
 (3, 'Keyboard', 'Computer Supplies', 50, 500, '/image/keyboard.png'),
-(4, 'A4-Paper', 'Printing Supplies', 1000, 0.1, NULL),
+(4, 'A4-Paper', 'Printing Supplies', 1000, 0.1, '/image/a4_paper.jpg'),
 (5, 'HDMI-Cable', 'Computer Supplies', 60, 120, '/image/hdmi-cable.png'),
-(6, 'Black Printer Ink', 'Printing Supplies', 40, 350, NULL),
-(7, 'Green Printer Ink', 'Printing Supplies', 10, 350, NULL),
+(6, 'Black Printer Ink', 'Printing Supplies', 40, 350, '/image/black_ink.jpg'),
+(7, 'Green Printer Ink', 'Printing Supplies', 10, 350, '/image/green_ink.png'),
 (8, 'Gucci Sandals', 'Footwear', 10000, 9999, '/image/Sandals.jpg');
 
 -- --------------------------------------------------------
@@ -108,20 +108,23 @@ INSERT INTO `Products` (`productID`, `productName`, `productCategory`, `productS
 --
 
 CREATE TABLE `ShoppingCart` (
-  `customerID` int NOT NULL,
   `productID` int NOT NULL,
-  `poductName` varchar(45) NOT NULL,
-  `productCategory` varchar(45) NOT NULL,
-  `productPrice` double NOT NULL,
-  `productCartQuantity` int DEFAULT NULL
+  `customerID` int NOT NULL,
+  `amount` int DEFAULT NULL,
+  `shoppingcartItem` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumpning av Data i tabell `ShoppingCart`
 --
 
-INSERT INTO `ShoppingCart` (`customerID`, `productID`, `poductName`, `productCategory`, `productPrice`, `productCartQuantity`) VALUES
-(2, 1, 'Pencil', 'Desk Supplies', 5, 1);
+INSERT INTO `ShoppingCart` (`productID`, `customerID`, `amount`, `shoppingcartItem`) VALUES
+(1, 2, 5, 1),
+(1, 1, 5, 2),
+(3, 1, 1, 3),
+(3, 3, 1, 5),
+(3, 3, 1, 6),
+(3, 3, 1, 7);
 
 --
 -- Index för dumpade tabeller
@@ -160,8 +163,9 @@ ALTER TABLE `Products`
 -- Index för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  ADD UNIQUE KEY `customerID_UNIQUE` (`customerID`),
-  ADD UNIQUE KEY `productID_UNIQUE` (`productID`);
+  ADD UNIQUE KEY `shoppingcartItem_UNIQUE` (`shoppingcartItem`),
+  ADD KEY `selectedCustomerID_idx` (`customerID`),
+  ADD KEY `selectedProductID_idx` (`productID`);
 
 --
 -- AUTO_INCREMENT för dumpade tabeller
@@ -171,7 +175,7 @@ ALTER TABLE `ShoppingCart`
 -- AUTO_INCREMENT för tabell `Customers`
 --
 ALTER TABLE `Customers`
-  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT för tabell `Products`
@@ -183,7 +187,7 @@ ALTER TABLE `Products`
 -- AUTO_INCREMENT för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restriktioner för dumpade tabeller
@@ -206,8 +210,8 @@ ALTER TABLE `Order`
 -- Restriktioner för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  ADD CONSTRAINT `selectedProductID` FOREIGN KEY (`productID`) REFERENCES `Products` (`productID`),
-  ADD CONSTRAINT `userID` FOREIGN KEY (`customerID`) REFERENCES `Customers` (`customerID`);
+  ADD CONSTRAINT `selectedCustomerID` FOREIGN KEY (`customerID`) REFERENCES `Customers` (`customerID`),
+  ADD CONSTRAINT `selectedProductID` FOREIGN KEY (`productID`) REFERENCES `Products` (`productID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
