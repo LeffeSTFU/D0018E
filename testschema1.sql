@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost:3306
--- Tid vid skapande: 17 feb 2023 kl 14:53
+-- Tid vid skapande: 20 feb 2023 kl 15:23
 -- Serverversion: 8.0.32-0ubuntu0.22.04.2
 -- PHP-version: 8.1.2-1ubuntu2.10
 
@@ -119,12 +119,14 @@ CREATE TABLE `ShoppingCart` (
 --
 
 INSERT INTO `ShoppingCart` (`productID`, `customerID`, `amount`, `shoppingcartItem`) VALUES
-(1, 2, 5, 1),
-(1, 1, 5, 2),
-(3, 1, 1, 3),
-(3, 3, 1, 5),
-(3, 3, 1, 6),
-(3, 3, 1, 7);
+(1, 2, 0, 1),
+(1, 1, 6, 2),
+(3, 1, 10, 3),
+(3, 3, 9, 5),
+(3, 3, 9, 6),
+(3, 3, 9, 7),
+(2, 2, 6, 8),
+(5, 1, 5, 10);
 
 --
 -- Index för dumpade tabeller
@@ -187,7 +189,7 @@ ALTER TABLE `Products`
 -- AUTO_INCREMENT för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restriktioner för dumpade tabeller

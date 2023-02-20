@@ -23,6 +23,18 @@ if ($result->num_rows > 0) {
   <?php
     while($row = $result->fetch_assoc())
       {
+        $button1 = "UPDATE ShoppingCart SET amount = amount - 1 WHERE amount > 0 AND customerID = '$usr_id' AND productID = $row[productID];";
+        
+
+        /*$button1 = NOWRD();
+        function NWORD(){
+          $currAmount = SELECT amount FROM ShoppingCart WHERE customerID = '$usr_id' AND productID = $row[productID];
+          if($currAmount <= 1){
+            DELETE FROM `testschema1`.`ShoppingCart` WHERE customerID = '$usr_id' AND productID = $row[productID];
+          }
+          else{
+            UPDATE ShoppingCart SET amount = amount - 1 WHERE amount > 0 AND customerID = '$usr_id' AND productID = $row[productID];
+          }*/
   ?>
   <div class="Product-cards">
       <div class="card">
@@ -37,6 +49,10 @@ if ($result->num_rows > 0) {
               <p class="price">
                 Price: <?php echo $row["productPrice"]; ?>
               </p>
+              <form method="post">
+                <button type="submit" name="button2" value="<?php echo $button1; ?>" id="Remove_from_cart">Remove one from cart</button>
+                
+              </form>
           </div>
       </div><br>
   </div>
@@ -49,5 +65,9 @@ if ($result->num_rows > 0) {
 } else {
   echo "0 results";
 }
+if(isset($_POST['button2'])){
+  $conn->query($_POST['button2']);
+  header("refresh:0");
+  }
 $conn->close();
 ?>
