@@ -6,23 +6,25 @@ session_start();
 	<head>
 		<meta charset="UTF-8">
 		<meta name = "description" contents="main page for Fyrby Office Products">
-		<link rel="stylesheet" href="style.css" type="text/css">
+		<link rel="stylesheet" href="../style.css" type="text/css">
 	</head>
 	<body>
 		<header>
-			<h1>Fyrby Office Products Admin Page</h1> 
+			<h1>Fyrby Office Products Admin Page</h1>
 			
 			<div class="topnav">
+				<p>User: <?php echo $_SESSION['user_name']; ?></p>
 				<a class="active" href="adminhome.php">Home</a>
 				<a href="adminproductpage.php">Product management</a>
-				<a href="logoutpage.php">Log Out</a>
+				<a href="../logoutpage.php">Log Out</a>
 				<a href="admincustomerpage.php">Customer management</a>
 				<a href="adminorders.php">Order management</a>
 				<div class="search-container">
-					<form method="post" action="action_search.php">
-						<input type="text" name="search" placeholder="Search..." required>
-						<input type="submit" value="Search">
+					<form method="get" action="../search/action_search.php">
+						<input type="text" placeholder="Search.." name="search">
+						<button type="submit"><i class="fa fa-search"></i></button>
 					</form>
+				</div>
 				</div>
 			  </div>
 		</header>

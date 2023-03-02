@@ -1,3 +1,3 @@
 <?php include("../Home/header.html"); ?>
-<?php include("search.html"); ?>
+<?php include("computerbody.html"); ?>
 <?php echo file_get_contents("../Home/footer.html"); ?>

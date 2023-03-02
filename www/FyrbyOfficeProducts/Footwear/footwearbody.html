@@ -17,18 +17,16 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
   ?>
   <div class="Products-body">
-    <?php
+  <?php
     while($row = $result->fetch_assoc())
       {
         $cart = "SELECT * FROM `ShoppingCart` WHERE customerID = '$_SESSION[user_id]' AND productID = '$row[productID]';";
         $checkCart = $conn->query($cart);
         if($checkCart->num_rows == 0) {
-          $submission = "INSERT INTO `ShoppingCart` (`productID`,`customerID`, `amount`) 
+          ${$row['productID'] . '-submission'} = "INSERT INTO `ShoppingCart` (`productID`,`customerID`, `amount`) 
           VALUES ('$row[productID]', '$_SESSION[user_id]', '1');";
         } else {
-          $cartRow = $checkCart->fetch_assoc();
-          $newAmount = $cartRow['amount'] + 1;
-          $submission = "UPDATE `ShoppingCart` SET `amount` = '$newAmount' WHERE customerID = '$_SESSION[user_id]' AND productID = '$row[productID]';";
+          ${$row['productID'] . '-submission'} = "UPDATE `ShoppingCart` SET amount = amount + 1 WHERE customerID = '$_SESSION[user_id]' AND productID = '$row[productID]';";
         }
   ?>
   <div class="Product-cards">
@@ -45,7 +43,7 @@ if ($result->num_rows > 0) {
                 Price: <?php echo $row["productPrice"]; ?>
               </p>
               <form method="post">
-                <button type="submit" name="button1" value="<?php echo $submission; ?>" id="Add_to_cart">add to cart</button>
+                <button type="submit" name="button1" value="<?php echo $row['productID']; ?>" id="Add_to_cart">add to cart</button>
               </form>
           </div>
       </div><br>
@@ -59,8 +57,7 @@ if ($result->num_rows > 0) {
   echo "0 results";
 }
 if(isset($_POST['button1'])){
-  $conn->query($_POST['button1']);
-  header("refresh:0");
+  $conn->query(${$_POST['button1'] . '-submission'});
 }
 $conn->close();
 ?>

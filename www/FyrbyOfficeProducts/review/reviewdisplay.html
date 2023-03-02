@@ -1,0 +1,51 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "Fyrby23";
+$dbname = "testschema1";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+$prod = $_POST['product'];
+$sql = "SELECT `productID` FROM `Products` WHERE `productName`='$prod' ;";
+$rs = $conn->query($sql);
+$prodID = $rs->fetch_assoc();
+
+$select = "SELECT * FROM Reviews WHERE productID = $prodID[productID] ;";
+$result = $conn->query($select);
+
+$avg = "SELECT AVG(stars) FROM Reviews WHERE productID = $prodID[productID] ;";
+$avrge = $conn->query($avg);
+$average = $avrge->fetch_assoc();
+
+$id = "SELECT customerUsername FROM Customers INNER JOIN Reviews ON Customers.customerID = Reviews.customerID AND productID = $prodID[productID];";
+$res = $conn->query($id);
+
+if ($result->num_rows > 0) {
+    ?>
+<h3>Available reviews:</h3>
+<table>
+    <tr>
+        <th><?php echo 'Average rating: ' ?> </th><th><?php echo $average['AVG(stars)'] ?></th>
+    </tr>
+    <tr>
+        <th>Rating</th><th>Comment</th><th>User</th>
+    </tr>
+    <?php while(($rad = $res->fetch_assoc()) && ($row = $result->fetch_assoc())){  ?>
+        <tr>
+            <td><?php echo $row['stars']; ?></td><td><?php echo $row['comment']; ?></td>
+            <td><?php echo $rad['customerUsername']; ?></td>
+        </tr>
+    <?php
+    } ?>
+</table>
+<?php
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>

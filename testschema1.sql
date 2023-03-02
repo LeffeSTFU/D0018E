@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost:3306
--- Tid vid skapande: 20 feb 2023 kl 15:23
+-- Tid vid skapande: 02 mars 2023 kl 12:18
 -- Serverversion: 8.0.32-0ubuntu0.22.04.2
 -- PHP-version: 8.1.2-1ubuntu2.10
 
@@ -47,29 +47,22 @@ INSERT INTO `Customers` (`customerID`, `customerFirstName`, `customerLastName`, 
 (2, 'Leffe', 'STFU', 'leffe.mail@mail.com', 'Lyckåsvägen 5', 'fyrby<3', 'LeffeSTFU', 'user'),
 (3, 'Renberg', 'Varlog', 'renberg.mail@mail.com', 'cringeSTHLM 69', 'fortniteBattleP4ass', 'Varlog', 'user'),
 (4, 'Spiffi', 'Qvist', 'spiffi.mail@mail.com', 'cringeSTHLM 420', '4guys<3', 'LimpusSensei', 'admin'),
-(9, 'Tester', 'test', 'fuck@mail.com', 'din mamma', 'test', 'test', 'user');
+(9, 'Tester', 'test', 'shit@mail.com', 'din mamma', 'test', 'test', 'user'),
+(11, 'Albert', 'Renell', 'albert@mail.com', 'Luleå', 'abc123', 'albren', 'user');
 
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur `Items`
+-- Tabellstruktur `Orders`
 --
 
-CREATE TABLE `Items` (
-  `productID` int NOT NULL,
-  `quantity` int NOT NULL,
-  `orderID` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Tabellstruktur `Order`
---
-
-CREATE TABLE `Order` (
+CREATE TABLE `Orders` (
   `orderID` int NOT NULL,
-  `customerID` int NOT NULL
+  `customerID` int NOT NULL,
+  `productID` int DEFAULT NULL,
+  `PriceAtOrder` double DEFAULT NULL,
+  `orderAmount` int DEFAULT NULL,
+  `orderInstance` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -104,6 +97,30 @@ INSERT INTO `Products` (`productID`, `productName`, `productCategory`, `productS
 -- --------------------------------------------------------
 
 --
+-- Tabellstruktur `Reviews`
+--
+
+CREATE TABLE `Reviews` (
+  `productID` int NOT NULL,
+  `comment` longtext,
+  `customerID` int NOT NULL,
+  `stars` double DEFAULT NULL,
+  `reviewID` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumpning av Data i tabell `Reviews`
+--
+
+INSERT INTO `Reviews` (`productID`, `comment`, `customerID`, `stars`, `reviewID`) VALUES
+(1, 'Utmärkt skrivdon', 1, 5, 2),
+(2, 'typ jävligt bra asså typ', 1, 5, 3),
+(4, 'fake paper', 1, 0, 8),
+(1, 'gottagetthatfortnitebattlepass', 3, 4, 10);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellstruktur `ShoppingCart`
 --
 
@@ -119,14 +136,17 @@ CREATE TABLE `ShoppingCart` (
 --
 
 INSERT INTO `ShoppingCart` (`productID`, `customerID`, `amount`, `shoppingcartItem`) VALUES
-(1, 2, 0, 1),
-(1, 1, 6, 2),
-(3, 1, 10, 3),
+(1, 1, 7, 2),
+(3, 1, 9, 3),
 (3, 3, 9, 5),
 (3, 3, 9, 6),
 (3, 3, 9, 7),
-(2, 2, 6, 8),
-(5, 1, 5, 10);
+(8, 11, 1, 19),
+(1, 11, 1, 20),
+(1, 2, 4, 38),
+(2, 2, 2, 39),
+(5, 2, 1, 40),
+(3, 2, 3, 41);
 
 --
 -- Index för dumpade tabeller
@@ -140,19 +160,12 @@ ALTER TABLE `Customers`
   ADD UNIQUE KEY `customerID_UNIQUE` (`customerID`);
 
 --
--- Index för tabell `Items`
+-- Index för tabell `Orders`
 --
-ALTER TABLE `Items`
-  ADD KEY `orderID_idx` (`orderID`),
+ALTER TABLE `Orders`
+  ADD UNIQUE KEY `orderInstance_UNIQUE` (`orderInstance`),
+  ADD KEY `customerID_idx` (`customerID`),
   ADD KEY `productID_idx` (`productID`);
-
---
--- Index för tabell `Order`
---
-ALTER TABLE `Order`
-  ADD PRIMARY KEY (`orderID`),
-  ADD UNIQUE KEY `customerID_UNIQUE` (`orderID`),
-  ADD KEY `customerID_idx` (`customerID`);
 
 --
 -- Index för tabell `Products`
@@ -160,6 +173,14 @@ ALTER TABLE `Order`
 ALTER TABLE `Products`
   ADD PRIMARY KEY (`productID`),
   ADD UNIQUE KEY `productID_UNIQUE` (`productID`);
+
+--
+-- Index för tabell `Reviews`
+--
+ALTER TABLE `Reviews`
+  ADD UNIQUE KEY `reviewID_UNIQUE` (`reviewID`),
+  ADD KEY `productID_idx` (`productID`),
+  ADD KEY `customerID_idx` (`customerID`);
 
 --
 -- Index för tabell `ShoppingCart`
@@ -177,7 +198,13 @@ ALTER TABLE `ShoppingCart`
 -- AUTO_INCREMENT för tabell `Customers`
 --
 ALTER TABLE `Customers`
-  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT för tabell `Orders`
+--
+ALTER TABLE `Orders`
+  MODIFY `orderInstance` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT för tabell `Products`
@@ -186,27 +213,34 @@ ALTER TABLE `Products`
   MODIFY `productID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT för tabell `Reviews`
+--
+ALTER TABLE `Reviews`
+  MODIFY `reviewID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Restriktioner för dumpade tabeller
 --
 
 --
--- Restriktioner för tabell `Items`
+-- Restriktioner för tabell `Orders`
 --
-ALTER TABLE `Items`
-  ADD CONSTRAINT `orderID` FOREIGN KEY (`orderID`) REFERENCES `Order` (`orderID`),
+ALTER TABLE `Orders`
+  ADD CONSTRAINT `customerID` FOREIGN KEY (`customerID`) REFERENCES `Customers` (`customerID`),
   ADD CONSTRAINT `productID` FOREIGN KEY (`productID`) REFERENCES `Products` (`productID`);
 
 --
--- Restriktioner för tabell `Order`
+-- Restriktioner för tabell `Reviews`
 --
-ALTER TABLE `Order`
-  ADD CONSTRAINT `customerID` FOREIGN KEY (`customerID`) REFERENCES `Customers` (`customerID`);
+ALTER TABLE `Reviews`
+  ADD CONSTRAINT `customersID` FOREIGN KEY (`customerID`) REFERENCES `Customers` (`customerID`),
+  ADD CONSTRAINT `productsID` FOREIGN KEY (`productID`) REFERENCES `Products` (`productID`);
 
 --
 -- Restriktioner för tabell `ShoppingCart`

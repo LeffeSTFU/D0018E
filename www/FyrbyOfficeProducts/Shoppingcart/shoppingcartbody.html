@@ -16,25 +16,24 @@ $usr_id = $_SESSION["user_id"];
 $sql = "SELECT Products.*, ShoppingCart.amount FROM Products INNER JOIN ShoppingCart ON Products.productID = ShoppingCart.productID AND ShoppingCart.customerID = '$usr_id';";
 
 $result = $conn->query($sql);
-
 if ($result->num_rows > 0) {
   ?>
   <div class="Products-body">
   <?php
     while($row = $result->fetch_assoc())
       {
-        $button1 = "UPDATE ShoppingCart SET amount = amount - 1 WHERE amount > 0 AND customerID = '$usr_id' AND productID = $row[productID];";
-        
+        $currAmount = $row['amount'];
+        if($currAmount <= 1){
+          ${$row['productID'] . '-submission'} = "DELETE FROM ShoppingCart WHERE customerID = '$usr_id' AND productID = $row[productID];";
+          $button_text = "Remove from cart";
+        }
+        else{
+          ${$row['productID'] . '-submission'} = "UPDATE ShoppingCart SET amount = amount - 1 WHERE amount > 0 AND customerID = '$usr_id' AND productID = $row[productID];";
+          $button_text = "Remove one from cart";
+        }
 
-        /*$button1 = NOWRD();
-        function NWORD(){
-          $currAmount = SELECT amount FROM ShoppingCart WHERE customerID = '$usr_id' AND productID = $row[productID];
-          if($currAmount <= 1){
-            DELETE FROM `testschema1`.`ShoppingCart` WHERE customerID = '$usr_id' AND productID = $row[productID];
-          }
-          else{
-            UPDATE ShoppingCart SET amount = amount - 1 WHERE amount > 0 AND customerID = '$usr_id' AND productID = $row[productID];
-          }*/
+        $button_text3 = "Create Order with products in cart"
+        
   ?>
   <div class="Product-cards">
       <div class="card">
@@ -50,8 +49,7 @@ if ($result->num_rows > 0) {
                 Price: <?php echo $row["productPrice"]; ?>
               </p>
               <form method="post">
-                <button type="submit" name="button2" value="<?php echo $button1; ?>" id="Remove_from_cart">Remove one from cart</button>
-                
+                <button type="submit" name="remove" value="<?php echo $row['productID']; ?>" id="Remove_from_cart"><?php echo $button_text; ?></button>
               </form>
           </div>
       </div><br>
@@ -59,15 +57,72 @@ if ($result->num_rows > 0) {
   <?php
     }
   ?>
+  <form method="post">
+    <button type="submit" name="Create_order" value="<?php echo $row['productID']; ?>" id="Create_order"><?php echo $button_text3; ?></button>
+  </form>
+  <div class="orders">
+    <a href="../orders.php">Your orders</a>
+  </div>
+  
 </div>
-
 <?php
 } else {
   echo "0 results";
 }
-if(isset($_POST['button2'])){
-  $conn->query($_POST['button2']);
+if(isset($_POST['remove'])){
+  $conn->query(${$_POST['remove'] . '-submission'});
   header("refresh:0");
+}
+
+// When create order button is pressed
+if(array_key_exists('Create_order', $_POST)){
+  // Fetch the highest value of "shoppingcartItem" that we should loop up to
+  $max_shoppingcartItem = "SELECT MAX(shoppingcartItem) FROM ShoppingCart WHERE customerID = '$usr_id';";
+
+  //Fetch the highest orderID for the customer and increase by one
+  $orderID_new = "SELECT MAX(orderID) FROM Orders WHERE customerID = '$usr_id';";
+  
+  // Fetch all "shoppingcartItem" that we should loop over
+  $sql2 = "SELECT shoppingcartItem FROM ShoppingCart WHERE customerID = '$usr_id';";
+
+  $result2 = $conn->query($sql2);
+  
+  
+  if ($result2->num_rows > 0) {
+    // Loop through all of the products in the shoppingcart that should be added to the order and then remove them out of the shoppingcart
+    while($row_loop = $result2->fetch_assoc()){
+      echo "  Start of while loop  ";
+      $shoppingCartItem_var = $row_loop['shoppingcartItem'];
+      //echo "  shoppingCartItem_var: ";
+      //echo $shoppingCartItem_var;
+    
+      // Find all values for an item
+      $sql3 = "SELECT productID FROM ShoppingCart WHERE shoppingcartItem = '$shoppingCartItem_var';";
+      $sql3fet = $conn->query($sql3);
+      $row_product = $sql3fet->fetch_assoc();
+      $test = $row_product['productID'];
+
+      $sql4 = "SELECT producPrice FROM Products WHERE productID = '$test';";
+      //$sql4fet = $conn->query($sql4);
+      //$row_priceAtOrder = $sql4fet->fetch_assoc();
+      //echo $row_priceAtOrder['producPrice'];
+
+      //$sql5 = "SELECT amount FROM ShoppingCart WHERE shoppingcartItem = '$shoppingCartItem_var';"; //$row_amount
+
+
+      //$sql6 = "SELECT MAX(orderInstance) FROM Orders;" + 1; //$row_instanceNew
+
+
+
+
+      echo "  End of while loop ";
+      // Insert the grabbed info into the Orders table
+      // Ska det se ut typ så här? $sql_insert = "INSERT INTO `testschema1`.`Orders` (`orderID`, `customerID`, `productID`, `PriceAtOrder`, `orderAmount`, `orderInstance`) VALUES ('$orderID_new', '$user_id', '$row_product', '$row_priceAtOrder', '$row_amount', '$row_amount');";
+      // Forts. $conn->query($sql_insert);
+
+    }
   }
+}
+
 $conn->close();
 ?>
