@@ -1,0 +1,49 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "Fyrby23";
+$dbname = "testschema1";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+$select = "SELECT productName FROM Products";
+$rs = $conn->query($select);
+
+?>
+
+<fieldset>
+    <legend>Add a review</legend>
+    <form name="reviewform" method="post" action="action_review.php">
+        <P>
+        <label for="product">Product</label><br>
+        <select name="product" id="product">
+            <?php foreach( $rs as $row ){
+                echo "<option>" . $row['productName'] . "</option>";
+               }
+             ?> 
+        </select>
+        </P>
+        <P>
+            <legend>Rating</legend>
+        <input type="radio" id="0" name="rate" value="0">
+        <label for="0star">0</label><br>
+        <input type="radio" id="1" name="rate" value="1">
+        <label for="1star">1</label><br>
+        <input type="radio" id="2" name="rate" value="2">
+        <label for="2star">2</label><br>
+        <input type="radio" id="3" name="rate" value="3">
+        <label for="3star">3</label><br>
+        <input type="radio" id="4" name="rate" value="4">
+        <label for="4star">4</label><br>
+        <input type="radio" id="5" name="rate" value="5">
+        <label for="5star">5</label><br>
+        </P>
+        <P>
+        <label for="comment">Comment</label><br>
+        <input type="text" required pattern=".*\S+.*" id="comment" name="comment" value=""><br><br>
+        </P>
+        <input type="submit" name="Submit" id="Submit" value="Submit">
+    </form> 
+</fieldset>
+      

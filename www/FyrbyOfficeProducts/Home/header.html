@@ -1,0 +1,39 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name = "description" contents="main page for Fyrby Office Products">
+		<link rel="stylesheet" href="../style.css" type="text/css">
+	</head>
+	<body>
+		<header>
+			<h1>Fyrby Office Products</h1> 
+			
+			<div class="topnav">
+				<?php if ($_SESSION['user_name'] != NULL){ ?>
+					<p>User: <?php echo $_SESSION['user_name']; ?></p> <?php
+				} ?>
+				<a class="active" href="../index.php">Home</a>
+				<a href="../Desk/desk.php">Desk Supplies</a>
+				<a href="../Computer/computer.php">Computer Supplies</a>
+				<a href="../Footwear/footwear.php">Footwear</a>
+				<a href="../Printing/printing.php">Printing Supplies</a>
+				<a href="../signup/signuppage.php">Sign Up</a>
+				<a href="../login/loginpage.php">Log In</a>
+				<a href="../logoutpage.php">Log Out</a>
+				<a href="../Shoppingcart/shoppingcart.php">Shoppingcart</a>
+				<a href="../review/reviewform.php">Write a Review</a>
+				<a href="../review/reviewbrowse.php">Browse Reviews</a>
+				<div class="search-container">
+					<form method="get" action="../search/action_search.php">
+						<input type="text" placeholder="Search.." name="search">
+						<button type="submit"><i class="fa fa-search"></i></button>
+					</form>
+				</div>
+			  </div>
+		</header>
+		<div id="contents">
+
