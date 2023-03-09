@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost:3306
--- Tid vid skapande: 02 mars 2023 kl 12:18
+-- Tid vid skapande: 09 mars 2023 kl 17:27
 -- Serverversion: 8.0.32-0ubuntu0.22.04.2
 -- PHP-version: 8.1.2-1ubuntu2.10
 
@@ -43,12 +43,12 @@ CREATE TABLE `Customers` (
 --
 
 INSERT INTO `Customers` (`customerID`, `customerFirstName`, `customerLastName`, `customerMail`, `customerAddress`, `customerPassword`, `customerUsername`, `accountType`) VALUES
-(1, 'Fyrby', 'Fyrby', 'fryby.mail@mail.com', 'Roddbåtsvägen 24', 'abc123', 'Fyrby', 'user'),
+(1, 'Fyrby', 'Fyrby', 'fryby.mail@mail.com', 'Roddbåtsvägen 25', 'abc123', 'Fyrby', 'user'),
 (2, 'Leffe', 'STFU', 'leffe.mail@mail.com', 'Lyckåsvägen 5', 'fyrby<3', 'LeffeSTFU', 'user'),
 (3, 'Renberg', 'Varlog', 'renberg.mail@mail.com', 'cringeSTHLM 69', 'fortniteBattleP4ass', 'Varlog', 'user'),
 (4, 'Spiffi', 'Qvist', 'spiffi.mail@mail.com', 'cringeSTHLM 420', '4guys<3', 'LimpusSensei', 'admin'),
-(9, 'Tester', 'test', 'shit@mail.com', 'din mamma', 'test', 'test', 'user'),
-(11, 'Albert', 'Renell', 'albert@mail.com', 'Luleå', 'abc123', 'albren', 'user');
+(11, 'Albert', 'Renell', 'albert@mail.com', 'Luleå', 'abc123', 'albren', 'user'),
+(26, 'admin', 'admin', 'admin@mail.com', 'admin town', 'admin', 'admin', 'admin');
 
 -- --------------------------------------------------------
 
@@ -64,6 +64,21 @@ CREATE TABLE `Orders` (
   `orderAmount` int DEFAULT NULL,
   `orderInstance` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumpning av Data i tabell `Orders`
+--
+
+INSERT INTO `Orders` (`orderID`, `customerID`, `productID`, `PriceAtOrder`, `orderAmount`, `orderInstance`) VALUES
+(1, 2, 1, 5, 4, 4),
+(1, 2, 2, 5, 2, 5),
+(1, 2, 5, 120, 1, 6),
+(1, 2, 3, 500, 3, 7),
+(1, 11, 8, 9999, 1, 23),
+(1, 11, 1, 5, 2, 24),
+(1, 11, 2, 5, 2, 25),
+(1, 11, 3, 500, 1, 26),
+(1, 11, 5, 120, 1, 27);
 
 -- --------------------------------------------------------
 
@@ -85,14 +100,15 @@ CREATE TABLE `Products` (
 --
 
 INSERT INTO `Products` (`productID`, `productName`, `productCategory`, `productStock`, `productPrice`, `imageFile`) VALUES
-(1, 'Pencil', 'Desk Supplies', 500, 5, '/image/pencil.jpg'),
-(2, 'Eraser', 'Desk Supplies', 100, 5, '/image/eraser.png'),
-(3, 'Keyboard', 'Computer Supplies', 50, 500, '/image/keyboard.png'),
+(1, 'Pencil', 'Desk Supplies', 1, 50, '/image/pencil.jpg'),
+(2, 'Eraser', 'Desk Supplies', 90, 5, '/image/eraser.png'),
+(3, 'Keyboard', 'Computer Supplies', 46, 500, '/image/keyboard.png'),
 (4, 'A4-Paper', 'Printing Supplies', 1000, 0.1, '/image/a4_paper.jpg'),
-(5, 'HDMI-Cable', 'Computer Supplies', 60, 120, '/image/hdmi-cable.png'),
-(6, 'Black Printer Ink', 'Printing Supplies', 40, 350, '/image/black_ink.jpg'),
+(5, 'HDMI-Cable', 'Computer Supplies', 52, 120, '/image/hdmi-cable.png'),
+(6, 'Black Printer Ink', 'Printing Supplies', 1, 350, '/image/black_ink.jpg'),
 (7, 'Green Printer Ink', 'Printing Supplies', 10, 350, '/image/green_ink.png'),
-(8, 'Gucci Sandals', 'Footwear', 10000, 9999, '/image/Sandals.jpg');
+(8, 'Gucci Sandals', 'Footwear', 9999, 9999, '/image/Sandals.jpg'),
+(11, 'Party Hat', 'Desk Supplies', 54, 50, '/image/TUN-party.gif');
 
 -- --------------------------------------------------------
 
@@ -116,7 +132,13 @@ INSERT INTO `Reviews` (`productID`, `comment`, `customerID`, `stars`, `reviewID`
 (1, 'Utmärkt skrivdon', 1, 5, 2),
 (2, 'typ jävligt bra asså typ', 1, 5, 3),
 (4, 'fake paper', 1, 0, 8),
-(1, 'gottagetthatfortnitebattlepass', 3, 4, 10);
+(1, 'gottagetthatfortnitebattlepass', 3, 4, 10),
+(6, 'very nice', 1, 3, 11),
+(7, 'bad quality', 1, 2, 12),
+(4, 'excellent quality, love it!', 3, 5, 13),
+(8, 'comfortable and stylish, what more can you ask for?', 3, 5, 14),
+(5, 'good quality and good pricing', 3, 5, 15),
+(11, 'nice', 3, 5, 16);
 
 -- --------------------------------------------------------
 
@@ -136,17 +158,21 @@ CREATE TABLE `ShoppingCart` (
 --
 
 INSERT INTO `ShoppingCart` (`productID`, `customerID`, `amount`, `shoppingcartItem`) VALUES
-(1, 1, 7, 2),
-(3, 1, 9, 3),
+(1, 1, 6, 2),
+(3, 1, 7, 3),
 (3, 3, 9, 5),
 (3, 3, 9, 6),
 (3, 3, 9, 7),
-(8, 11, 1, 19),
-(1, 11, 1, 20),
-(1, 2, 4, 38),
-(2, 2, 2, 39),
-(5, 2, 1, 40),
-(3, 2, 3, 41);
+(4, 3, 1, 66),
+(6, 3, 1, 67),
+(4, 1, 1, 68),
+(11, 11, 1, 156),
+(2, 11, 1, 157),
+(1, 11, 1, 158),
+(2, 2, 1, 177),
+(1, 2, 2, 178),
+(3, 2, 1, 179),
+(6, 2, 2, 180);
 
 --
 -- Index för dumpade tabeller
@@ -198,31 +224,31 @@ ALTER TABLE `ShoppingCart`
 -- AUTO_INCREMENT för tabell `Customers`
 --
 ALTER TABLE `Customers`
-  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT för tabell `Orders`
 --
 ALTER TABLE `Orders`
-  MODIFY `orderInstance` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `orderInstance` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT för tabell `Products`
 --
 ALTER TABLE `Products`
-  MODIFY `productID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `productID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT för tabell `Reviews`
 --
 ALTER TABLE `Reviews`
-  MODIFY `reviewID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `reviewID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
 
 --
 -- Restriktioner för dumpade tabeller

@@ -32,7 +32,7 @@ if ($rs->num_rows > 0) {
 	$insert = "INSERT INTO `Reviews` (`productID`,`comment`,`customerID`,`stars`) 
 	VALUES ('$prodID[productID]', '$comm', '$usr', '$rating');";
 	if($conn->query($insert) === TRUE){
-		header("location:reviewdisplay.php");
+		header("location:reviewbrowse.php");
 	}
 	else {
 		echo "Error: " . $insert . "<br>" . $conn->error;

@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 $search = $_GET['search'];
 
-$sql = "SELECT * FROM `Products` WHERE `productName` LIKE '%".$search."%';";
+$sql = "SELECT Products.*, AVG(stars) AS average FROM Products LEFT JOIN Reviews ON Products.productID = Reviews.productID WHERE `productName` LIKE '%".$search."%' GROUP BY productID;";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -43,6 +43,9 @@ if ($result->num_rows > 0) {
               </h6>
               <p class="price">
                 Price: <?php echo $row["productPrice"]; ?>
+              </p>
+              <p class ="rating">
+                Rating: <?php echo $row["average"]; ?>
               </p>
               <form method="post">
                 <button type="submit" name="button1" value="<?php echo $row['productID']; ?>" id="Add_to_cart">add to cart</button>

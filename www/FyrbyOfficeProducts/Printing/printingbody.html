@@ -1,5 +1,4 @@
 <?php
-$_SESSION["user_name"] = 'Abeba';
 $servername = "localhost";
 $username = "root";
 $password = "Fyrby23";
@@ -12,12 +11,8 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM `Products` WHERE productCategory=\"Printing Supplies\";";
+$sql = "SELECT Products.*, AVG(stars) AS average FROM Products LEFT JOIN Reviews ON Products.productID = Reviews.productID WHERE Products.productCategory=\"Printing Supplies\" GROUP BY productID;";
 $result = $conn->query($sql);
-
-$avg = "SELECT AVG(stars) FROM Reviews WHERE productID = $result['productID'] ;";
-$avrge = $conn->query($avg);
-$average = $avrge->fetch_assoc();
 
 if ($result->num_rows > 0) {
   ?>
@@ -48,11 +43,13 @@ if ($result->num_rows > 0) {
                 Price: <?php echo $row["productPrice"]; ?>
               </p>
               <p class ="rating">
-                Rating: <?php echo $average['AVG(stars)'] ?>
+                Rating: <?php echo $row["average"]; ?>
               </p>
-              <form method="post">
+              <?php if($row["productStock"] > 0) { ?>
+              <form method="post">  
                 <button type="submit" name="button1" value="<?php echo $row['productID']; ?>" id="Add_to_cart">add to cart</button>
               </form>
+              <?php } ?>
           </div>
       </div><br>
   </div>
