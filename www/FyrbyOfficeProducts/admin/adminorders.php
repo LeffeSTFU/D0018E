@@ -18,8 +18,8 @@ if($_SESSION['user_type']=='admin'){
     $rs = $conn->query($select); ?>
     
     <fieldset>
-        <legend>Monitor specifict Users orders:</legend>
-        <form name="reviewform" method="post" action="action_user_orders.php">
+        <legend>Monitor specific User orders:</legend>
+        <form name="reviewform" method="get" action="action_user_orders.php">
             <P>
             <label for="Username">Username</label><br>
             <select name="username" id="username">

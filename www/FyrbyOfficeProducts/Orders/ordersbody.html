@@ -16,11 +16,10 @@ $usr_id = $_SESSION["user_id"];
 $sql = "SELECT * FROM Orders WHERE customerID = $usr_id;";
 
 
-
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    $last_orderID = 0;
+    $last_orderID = 1;
     $orderCost = 0;
   ?>
 <!--Start av första ordern, ingen första produkt-->
@@ -35,7 +34,35 @@ if ($result->num_rows > 0) {
       </div>
   </div>
 </div>
+
+<div class="Product-cards">
+  <div class="card">
+      <div class="card-body">
+          <h5 class="card-title">
+              <?php 
+              $prdID = $row['productID'];
+              $sql2 = "SELECT productName FROM Products WHERE productID = '$prdID';";
+              $sql2fet = $conn->query($sql2);
+              $product_name1 = $sql2fet->fetch_assoc();
+              $prdname = $product_name1['productName'];
+              echo $prdname;
+              ?>
+          </h5>
+          <h6 class="card-stock">
+            Amount: <?php echo $row['orderAmount']; ?>
+          </h6>
+          <p class="price">
+            Price: <?php echo $row['PriceAtOrder']; ?>
+          </p>
+      </div>
+  </div>
+</div>
+
+
+
+
   <?php
+    $orderCost = $orderCost + ($row['PriceAtOrder'] * $row['orderAmount']);
     while($row = $result->fetch_assoc())
       {
         if((!($last_orderID == 0)) && ($row['orderID'] > $last_orderID)){
@@ -52,7 +79,6 @@ if ($result->num_rows > 0) {
           </div>
   <?php
           $orderCost = 0;
-          // Här ska HTML för "en ny order" in, samt första elementet i den ordern
   ?>
 <!--Här ska HTML för "en ny order" in, samt första elementet i den ordern-->
 <br>

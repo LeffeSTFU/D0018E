@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost:3306
--- Tid vid skapande: 09 mars 2023 kl 17:27
+-- Tid vid skapande: 10 mars 2023 kl 12:49
 -- Serverversion: 8.0.32-0ubuntu0.22.04.2
 -- PHP-version: 8.1.2-1ubuntu2.10
 
@@ -44,11 +44,12 @@ CREATE TABLE `Customers` (
 
 INSERT INTO `Customers` (`customerID`, `customerFirstName`, `customerLastName`, `customerMail`, `customerAddress`, `customerPassword`, `customerUsername`, `accountType`) VALUES
 (1, 'Fyrby', 'Fyrby', 'fryby.mail@mail.com', 'Roddbåtsvägen 25', 'abc123', 'Fyrby', 'user'),
-(2, 'Leffe', 'STFU', 'leffe.mail@mail.com', 'Lyckåsvägen 5', 'fyrby<3', 'LeffeSTFU', 'user'),
+(2, 'Leffe', 'STFU', 'leffe.mail@mail.com', 'Luleå', 'fyrby<3', 'LeffeSTFU', 'user'),
 (3, 'Renberg', 'Varlog', 'renberg.mail@mail.com', 'cringeSTHLM 69', 'fortniteBattleP4ass', 'Varlog', 'user'),
 (4, 'Spiffi', 'Qvist', 'spiffi.mail@mail.com', 'cringeSTHLM 420', '4guys<3', 'LimpusSensei', 'admin'),
 (11, 'Albert', 'Renell', 'albert@mail.com', 'Luleå', 'abc123', 'albren', 'user'),
-(26, 'admin', 'admin', 'admin@mail.com', 'admin town', 'admin', 'admin', 'admin');
+(26, 'admin', 'admin', 'admin@mail.com', 'admin town', 'admin', 'admin', 'admin'),
+(28, 'Leifi', 'Plomeros', 'leifi.plomeros@mail.com', 'Musta', '1234', 'leif2', 'user');
 
 -- --------------------------------------------------------
 
@@ -70,15 +71,18 @@ CREATE TABLE `Orders` (
 --
 
 INSERT INTO `Orders` (`orderID`, `customerID`, `productID`, `PriceAtOrder`, `orderAmount`, `orderInstance`) VALUES
-(1, 2, 1, 5, 4, 4),
-(1, 2, 2, 5, 2, 5),
-(1, 2, 5, 120, 1, 6),
-(1, 2, 3, 500, 3, 7),
 (1, 11, 8, 9999, 1, 23),
 (1, 11, 1, 5, 2, 24),
 (1, 11, 2, 5, 2, 25),
 (1, 11, 3, 500, 1, 26),
-(1, 11, 5, 120, 1, 27);
+(1, 28, 3, 500, 1, 139),
+(1, 28, 5, 120, 3, 140),
+(1, 28, 12, 80, 1, 141),
+(1, 28, 8, 9999, 1, 142),
+(2, 28, 2, 5, 2, 143),
+(2, 28, 11, 50, 2, 144),
+(2, 28, 5, 120, 2, 145),
+(2, 28, 7, 350, 2, 146);
 
 -- --------------------------------------------------------
 
@@ -100,15 +104,16 @@ CREATE TABLE `Products` (
 --
 
 INSERT INTO `Products` (`productID`, `productName`, `productCategory`, `productStock`, `productPrice`, `imageFile`) VALUES
-(1, 'Pencil', 'Desk Supplies', 1, 50, '/image/pencil.jpg'),
-(2, 'Eraser', 'Desk Supplies', 90, 5, '/image/eraser.png'),
-(3, 'Keyboard', 'Computer Supplies', 46, 500, '/image/keyboard.png'),
-(4, 'A4-Paper', 'Printing Supplies', 1000, 0.1, '/image/a4_paper.jpg'),
-(5, 'HDMI-Cable', 'Computer Supplies', 52, 120, '/image/hdmi-cable.png'),
-(6, 'Black Printer Ink', 'Printing Supplies', 1, 350, '/image/black_ink.jpg'),
-(7, 'Green Printer Ink', 'Printing Supplies', 10, 350, '/image/green_ink.png'),
-(8, 'Gucci Sandals', 'Footwear', 9999, 9999, '/image/Sandals.jpg'),
-(11, 'Party Hat', 'Desk Supplies', 54, 50, '/image/TUN-party.gif');
+(1, 'Pencil', 'Desk Supplies', 0, 50, '/image/pencil.jpg'),
+(2, 'Eraser', 'Desk Supplies', 78, 5, '/image/eraser.png'),
+(3, 'Keyboard', 'Computer Supplies', 28, 500, '/image/keyboard.png'),
+(4, 'A4-Paper', 'Printing Supplies', 999, 0.1, '/image/a4_paper.jpg'),
+(5, 'HDMI-Cable', 'Computer Supplies', 41, 120, '/image/hdmi-cable.png'),
+(6, 'Black Printer Ink', 'Printing Supplies', 0, 350, '/image/black_ink.jpg'),
+(7, 'Green Printer Ink', 'Printing Supplies', 6, 350, '/image/green_ink.png'),
+(8, 'Gucci Sandals', 'Footwear', 9998, 9999, '/image/Sandals.jpg'),
+(11, 'Party Hat', 'Desk Supplies', 51, 50, '/image/TUN-party.gif'),
+(12, 'Computer Mouse', 'Computer Supplies', 1, 80, '/image/computer-mouse-icon-free-png.png');
 
 -- --------------------------------------------------------
 
@@ -158,21 +163,14 @@ CREATE TABLE `ShoppingCart` (
 --
 
 INSERT INTO `ShoppingCart` (`productID`, `customerID`, `amount`, `shoppingcartItem`) VALUES
-(1, 1, 6, 2),
-(3, 1, 7, 3),
 (3, 3, 9, 5),
 (3, 3, 9, 6),
 (3, 3, 9, 7),
 (4, 3, 1, 66),
 (6, 3, 1, 67),
-(4, 1, 1, 68),
 (11, 11, 1, 156),
 (2, 11, 1, 157),
-(1, 11, 1, 158),
-(2, 2, 1, 177),
-(1, 2, 2, 178),
-(3, 2, 1, 179),
-(6, 2, 2, 180);
+(1, 11, 1, 158);
 
 --
 -- Index för dumpade tabeller
@@ -224,31 +222,31 @@ ALTER TABLE `ShoppingCart`
 -- AUTO_INCREMENT för tabell `Customers`
 --
 ALTER TABLE `Customers`
-  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `customerID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT för tabell `Orders`
 --
 ALTER TABLE `Orders`
-  MODIFY `orderInstance` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `orderInstance` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
 
 --
 -- AUTO_INCREMENT för tabell `Products`
 --
 ALTER TABLE `Products`
-  MODIFY `productID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `productID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT för tabell `Reviews`
 --
 ALTER TABLE `Reviews`
-  MODIFY `reviewID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `reviewID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT för tabell `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
+  MODIFY `shoppingcartItem` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
 
 --
 -- Restriktioner för dumpade tabeller
